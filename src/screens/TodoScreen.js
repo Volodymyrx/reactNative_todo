@@ -1,13 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import {THEME} from '../theme'
+import { THEME } from "../theme";
+import { AppCard } from "../ui/AppCard";
+import { EditModal } from "../components/EditMoal";
 
-export const TodoScreen = ({ goBack, todo }) => {
+export const TodoScreen = ({ goBack, todo, onRemove }) => {
+  const [modal, setModal]=useState(false)
+  // const onCancel = () => {
+  //   setModal(false)
+  // }
   return (
     <View>
-      <Text>
-        title todo: {todo.title}, id: {todo.id}
-      </Text>
+      <EditModal visible={modal} onCancel={()=>setModal(false)} todo={todo}/>
+
+      <AppCard style={styles.card}>
+        <Text style={styles.title}>
+          title todo: {todo.title}, id: {todo.id}
+        </Text>
+        <Button title="Edit" onPress={() => setModal(true)} />
+      </AppCard>
 
       <View style={styles.buttons}>
         <View style={styles.buttons}>
@@ -18,9 +29,7 @@ export const TodoScreen = ({ goBack, todo }) => {
           <Button
             title="Delete"
             color={THEME.DANGER_COLOR}
-            onPress={(todo) => {
-              console.log("delete: todo with id:", todo.id);
-            }}
+            onPress={() => onRemove(todo.id)}
           />
         </View>
       </View>
@@ -34,7 +43,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-      width: '40%',
-
+    width: "40%",
+  },
+  card: {
+    marginBottom: 20,
+    padding: 10,
+  },
+  title: {
+    fontSize: 26,
   },
 });
