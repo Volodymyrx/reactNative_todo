@@ -11,6 +11,8 @@ export const EditModal = ({ visible, onCancel, todo }) => {
           placeholder="Input name of Todo"
           autoCapitalize="none"
           autoCorrect={false}
+          maxLength = {64}
+          
         />
         <View style={styles.buttons}>
           <Button
