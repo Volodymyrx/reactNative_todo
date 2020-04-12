@@ -1,13 +1,18 @@
 import React, {useState} from 'react'
-import {View, TextInput, Text, StyleSheet, Button} from 'react-native'
+import {View, TextInput, Text, StyleSheet, Button, Alert} from 'react-native'
 
 
 export const AddTodo = ({onSubmit}) => {
     const [value, setValue] =useState('')
 
     const pressHandler = () => {
-        onSubmit(value)
-        setValue('')
+        if (value.trim()) {
+            onSubmit(value)
+            setValue('')
+        } else {
+            Alert.alert('Name of todo can not be empty')
+        }
+       
     }
 
 
@@ -19,6 +24,8 @@ export const AddTodo = ({onSubmit}) => {
             onChangeText={setValue}
             value={value}
             placeholder =  "Input name of doing..."
+            autoCorrect = {false}
+            autoCapitalize='none'
             />
             <Button  title='Add' onPress={pressHandler}/>
     {/* <Text>value: {value}</Text> */}
