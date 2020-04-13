@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1,
     justifyContent: "center",
-    alignContent: "center",
+    alignItems: "center",
   },
   input: {
     padding: 10,
