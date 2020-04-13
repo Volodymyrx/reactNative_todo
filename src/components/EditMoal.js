@@ -1,8 +1,23 @@
-import React from "react";
-import { View, TextInput, StyleSheet, Button, Modal } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, StyleSheet, Button, Modal, Alert } from "react-native";
 import { THEME } from "../theme";
 
-export const EditModal = ({ visible, onCancel, todo }) => {
+export const EditModal = ({ visible, onCancel, todo, value, onSave }) => {
+  const [title, setTitle] = useState(value);
+const saveHandler=()=>{
+    if (title.trim().length < 3){
+        Alert.alert(
+            "Todo is too short.",
+            null,
+            [
+                "Ok",
+            ]
+        )
+    } else {
+        onSave(title)
+    }
+}
+
   return (
     <Modal visible={visible} animationType="slide" transparent={false}>
       <View style={styles.wrap}>
@@ -11,8 +26,9 @@ export const EditModal = ({ visible, onCancel, todo }) => {
           placeholder="Input name of Todo"
           autoCapitalize="none"
           autoCorrect={false}
-          maxLength = {64}
-          
+          maxLength={64}
+          value={title}
+          onChangeText={setTitle}
         />
         <View style={styles.buttons}>
           <Button
@@ -20,7 +36,7 @@ export const EditModal = ({ visible, onCancel, todo }) => {
             onPress={onCancel}
             color={THEME.DANGER_COLOR}
           />
-          <Button title="Save" />
+          <Button title="Save" onPress={saveHandler} />
         </View>
       </View>
     </Modal>
