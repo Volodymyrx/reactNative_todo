@@ -1,22 +1,39 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  ScrollView,
-  FlatList,
   Alert,
 } from "react-native";
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
+
 import { Navbar } from "./src/components/Navbar";
 import { MainScreen } from "./src/screens/MainScreen";
 import { TodoScreen } from "./src/screens/TodoScreen";
+import { THEME } from "./src/theme";
+
+async function loadApplication() {
+  await Font.loadAsync({
+    "roboto-regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "roboto-bold": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
+}
 
 export default function App() {
+  const [isReady, setIsRaady] = useState(false);
   const [todoId, setTodoId] = useState(null);
   const [todos, setTodos] = useState([
     { id: "1", title: "Study React Native" }, // temp for test
-    // { id: "2", title: "Write code Application" }, // temp for test
   ]);
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadApplication}
+        onError={(err) => console.log("error", err)}
+        onFinish={() => setIsRaady(true)}
+      />
+    );
+  }
 
   const addTodo = (title) => {
     setTodos((prev) => [
@@ -37,7 +54,7 @@ export default function App() {
           text: "Delete",
           // onPress: () => console.log('delete sure!'),
           onPress: () => {
-            setTodoId(null)
+            setTodoId(null);
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
           },
           style: "destructive",
@@ -55,15 +72,16 @@ export default function App() {
   const openTodo = (id) => {
     setTodoId(id);
   };
-  const updateTodo= (id,title) => {
-    setTodos(old =>
-      old.map(todo =>{
-        if (todo.id === id){
-          todo.title = title
+  const updateTodo = (id, title) => {
+    setTodos((old) =>
+      old.map((todo) => {
+        if (todo.id === id) {
+          todo.title = title;
         }
-        return todo
-      }))
-  }
+        return todo;
+      })
+    );
+  };
 
   let content = (
     <MainScreen
@@ -95,7 +113,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 30,
-    paddingVertical: 20,
+    paddingHorizontal: THEME.PADDING_HORIZONTAL,
+    paddingVertical: THEME.PADDING_VERTICAL,
   },
 });

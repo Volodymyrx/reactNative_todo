@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
+import {FontAwesome, AntDesign} from '@expo/vector-icons'
 import { THEME } from "../theme";
 import { AppCard } from "../ui/AppCard";
 import { EditModal } from "../components/EditMoal";
+import {AppTextBold} from "../ui/AppTextBold"
+import {AppButton} from "../ui/AppButton"
 
 export const TodoScreen = ({ goBack, todo, onRemove, onSave }) => {
   const [modal, setModal] = useState(false);
@@ -23,23 +26,29 @@ const saveHandler = title =>{
       />
 
       <AppCard style={styles.card}>
-        <Text style={styles.title}>
-          title todo: {todo.title}, id: {todo.id}
-        </Text>
-        <Button title="Edit" onPress={() => setModal(true)} />
+        <AppTextBold style={styles.title}>
+          {todo.title}
+        </AppTextBold>
+        <AppButton  onPress={() => setModal(true)} >
+          <FontAwesome name='edit' size={20} />
+        </AppButton>
       </AppCard>
 
       <View style={styles.buttons}>
-        <View style={styles.buttons}>
-          <Button title="Back" color={THEME.GREY_COLOR} onPress={goBack} />
+
+        <View style={styles.button}>
+          <AppButton color={THEME.GREY_COLOR} onPress={goBack} >
+            <AntDesign name='back' size={20} color='#fff'  />
+          </AppButton>
         </View>
 
-        <View style={styles.buttons}>
-          <Button
-            title="Delete"
+        <View style={styles.button}>
+          <AppButton
             color={THEME.DANGER_COLOR}
             onPress={() => onRemove(todo.id)}
-          />
+          >
+            <FontAwesome name='remove' size={20} color='#fff' />
+          </AppButton>
         </View>
       </View>
     </View>
@@ -52,13 +61,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    width: "40%",
+    // width: Dimensions.get('window').width / 3
+    width: Dimensions.get('window').width > 350 ? 150 : 100
   },
   card: {
     marginBottom: 20,
     padding: 10,
   },
   title: {
-    fontSize: 26,
+    fontSize: 20,
   },
 });

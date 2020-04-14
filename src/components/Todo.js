@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { AppText } from "../ui/AppText";
 
 export const Todo = ({ todo, onRemove, onOpen }) => {
   return (
@@ -9,16 +10,15 @@ export const Todo = ({ todo, onRemove, onOpen }) => {
       onLongPress={() => onRemove(todo.id)}
     >
       <View style={slyles.todo}>
-        <Text>
+        <AppText>
           {todo.title}, id: {todo.id}
-        </Text>
+        </AppText>
       </View>
     </TouchableOpacity>
   );
 };
 
 const slyles = StyleSheet.create({
-  text: {},
   todo: {
     flexDirection: "row",
     alignContent: "center",

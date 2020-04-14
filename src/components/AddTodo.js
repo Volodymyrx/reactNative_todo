@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, StyleSheet, Button, Alert } from "react-native";
+import { View, TextInput, StyleSheet, Alert, Keyboard } from "react-native";
+import { Entypo } from '@expo/vector-icons';
 import { THEME } from "../theme";
 
 export const AddTodo = ({ onSubmit }) => {
@@ -9,6 +10,7 @@ export const AddTodo = ({ onSubmit }) => {
     if (value.trim()) {
       onSubmit(value);
       setValue("");
+      Keyboard.dismiss()
     } else {
       Alert.alert("Name of todo can not be empty");
     }
@@ -25,7 +27,10 @@ export const AddTodo = ({ onSubmit }) => {
         autoCorrect={false}
         autoCapitalize="none"
       />
-      <Button title="Add" onPress={pressHandler} />
+      <Entypo.Button onPress={pressHandler} name='add-to-list'>
+        Add
+      </Entypo.Button>
+      {/* <Button title="Add" onPress={pressHandler} /> */}
     </View>
   );
 };
