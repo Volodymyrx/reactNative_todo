@@ -5,21 +5,12 @@ import { THEME } from "./theme";
 import { MainScreen } from "./screens/MainScreen";
 import { TodoScreen } from "./screens/TodoScreen";
 import { TodoContext } from "./context/todo/todoContext";
+import {ScreenContext} from './context/screen/screenContext'
 
 export const MainLayout = () => {
   const {todos,addTodo,updateTodo,removeTodo} = useContext(TodoContext);
-  const [todoId, setTodoId] = useState(null);
-//   const [todos, setTodos] = useState([]);
+  const {todoId, changeScreen} = useContext(ScreenContext)
 
-//   const addTodo = (title) => {
-//     setTodos((prev) => [
-//       ...prev,
-//       {
-//         id: Date.now().toString(),
-//         title,
-//       },
-//     ]);
-//   };
 //   const removeTodo = (id) => {
 //     const currentTodo = todos.find((todo) => todo.id === id);
 //     Alert.alert(
@@ -44,27 +35,18 @@ export const MainLayout = () => {
 //       { cancelable: false }
 //     );
 //   };
-//   const updateTodo = (id, title) => {
-//     setTodos((old) =>
-//       old.map((todo) => {
-//         if (todo.id === id) {
-//           todo.title = title;
-//         }
-//         return todo;
-//       })
-//     );
-//   };
 
-  const openTodo = (id) => {
-    setTodoId(id);
-  };
+
+  // const openTodo = (id) => {
+  //   setTodoId(id);
+  // };
 
   let content = (
     <MainScreen
       todos={todos}
       addTodo={addTodo}
       removeTodo={removeTodo}
-      openTodo={openTodo}
+      openTodo={changeScreen}
     />
   );
   if (todoId) {
@@ -72,7 +54,7 @@ export const MainLayout = () => {
     content = (
       <TodoScreen
         onRemove={removeTodo}
-        goBack={() => setTodoId(null)}
+        goBack={() => changeScreen(null)}
         todo={selectedTodo}
         onSave={updateTodo}
       />
