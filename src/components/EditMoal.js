@@ -18,6 +18,10 @@ const saveHandler=()=>{
         onSave(title)
     }
 }
+const cancelHandler=()=>{
+  setTitle(value)
+  onCancel()
+}
 
   return (
     <Modal visible={visible} animationType="slide" transparent={false}>
@@ -32,7 +36,7 @@ const saveHandler=()=>{
           onChangeText={setTitle}
         />
         <View style={styles.buttons}>
-          <AppButton color={THEME.DANGER_COLOR} onPress={onCancel}>
+          <AppButton color={THEME.DANGER_COLOR} onPress={cancelHandler}>
             Cancel
           </AppButton>
           <AppButton onPress={saveHandler} >
