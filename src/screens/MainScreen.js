@@ -1,17 +1,33 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, FlatList, Image, StyleSheet, Dimensions } from "react-native";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { AddTodo } from "../components/AddTodo";
 import { Todo } from "../components/Todo";
 import { THEME } from "../theme";
 import { TodoContext } from "../context/todo/todoContext";
 import { ScreenContext } from "../context/screen/screenContext";
+import { AppLoader } from "../components/AppLoader";
+import { AppText } from "../ui/AppText";
+import { AppButton } from "../ui/AppButton";
 
 export const MainScreen = () => {
-  const {todos, addTodo, removeTodo} = useContext(TodoContext)
-  const {changeScreen} = useContext(ScreenContext)
+  const { todos, addTodo, removeTodo, fetchTodos, loading, error } = useContext(
+    TodoContext
+  );
+  const { changeScreen } = useContext(ScreenContext);
   const [deviceWidth, setDeviceWidth] = useState(
     Dimensions.get("window").width - THEME.PADDING_HORIZONTAL * 2
   );
+  const loadTodos = useCallback(async () => await fetchTodos(), [fetchTodos]);
+  useEffect(() => {
+    loadTodos();
+  }, []);
   useEffect(() => {
     const update = () => {
       const width =
@@ -23,6 +39,19 @@ export const MainScreen = () => {
       Dimensions.removeEventListener("change", update);
     };
   });
+
+  // if (loading) {
+  //   return <AppLoader />
+  // }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <AppText style={styles.error}>{error}</AppText>
+        <AppButton onPress={loadTodos}>Repeat</AppButton>
+      </View>
+    );
+  }
 
   let content = (
     <View style={{ width: deviceWidth }}>
@@ -68,5 +97,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "contain",
+  },
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  error: {
+    color: THEME.DANGER_COLOR,
+    fontSize: 20,
   },
 });

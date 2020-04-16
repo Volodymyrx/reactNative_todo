@@ -11,7 +11,7 @@ export const Todo = ({ todo, onRemove, onOpen }) => {
     >
       <View style={slyles.todo}>
         <AppText>
-          {todo.title}, id: {todo.id}
+          {todo.title} 
         </AppText>
       </View>
     </TouchableOpacity>
