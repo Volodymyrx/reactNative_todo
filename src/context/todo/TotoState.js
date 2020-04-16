@@ -13,6 +13,7 @@ import {
   FETCH_TODOS,
 } from "../types";
 import { ScreenContext } from "../screen/screenContext";
+import { Http } from "../../http";
 
 export const TodoState = ({ children }) => {
   const initialState = {
@@ -24,28 +25,21 @@ export const TodoState = ({ children }) => {
   const { changeScreen } = useContext(ScreenContext);
   const [state, dispatch] = useReducer(todoReducer, initialState);
   const uri = "https://react-1f1bd.firebaseio.com/todos.json";
+
   const addTodo = async (title) => {
-    const response = await fetch(uri, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title }),
-    });
-    const data = await response.json();
-    console.log("id", data.name);
-    const id = data.name;
-    //  fetchTodos()
-    dispatch({ type: ADD_TODO, title, id });
+    const data = await Http.post(
+      "https://react-1f1bd.firebaseio.com/todos.json",
+      { title }
+    );
+    dispatch({ type: ADD_TODO, title, id: data.name });
   };
 
   const fetchTodos = async () => {
     // showLoader()
     clearError();
     try {
-      const response = await fetch(uri, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await response.json();
+      
+      const data = await Http.get("https://react-1f1bd.firebaseio.com/todos.json")
       const todos = Object.keys(data).map((key) => ({ ...data[key], id: key }));
       dispatch({ type: FETCH_TODOS, todos });
     } catch (e) {
@@ -60,11 +54,8 @@ export const TodoState = ({ children }) => {
     // showLoader()
     clearError();
     try {
-      await fetch(`https://react-1f1bd.firebaseio.com/todos/${id}.json`, {
-        method: "PUTCH",
-        headers: { "Content-Type": "applicatin/json" },
-        body: JSON.stringify({ title }),
-      });
+
+      await Http.patch(`https://react-1f1bd.firebaseio.com/todos/${id}.json`, {title})
       dispatch({ type: UPDATE_TODO, title, id });
     } catch (e) {
       SHOW_ERROR("Some thing wrong ...");
@@ -83,25 +74,15 @@ export const TodoState = ({ children }) => {
       [
         {
           text: "Delete",
-          // onPress: () => console.log('delete sure!'),
           onPress: async () => {
             changeScreen(null);
-            // my knolage
             try {
-              await fetch(
-                `https://react-1f1bd.firebaseio.com/todos/${id}.json`,
-                {
-                  method: "DELETE",
-                  headers: { "Content-Type": "applicatin/json" },
-                }
-              );
+              await Http.delete(`https://react-1f1bd.firebaseio.com/todos/${id}.json`)
               dispatch({ type: REMOVE_TODO, id });
             } catch (e) {
               SHOW_ERROR("Some thing wrong ...");
               console.log(e);
             }
-
-            // my end knolage
           },
           style: "destructive",
         },
